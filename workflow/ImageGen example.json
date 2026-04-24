@@ -34,6 +34,123 @@
       ]
     },
     {
+      "id": 14,
+      "type": "LoadImage",
+      "pos": [
+        9528.07446410572,
+        151.72725075145695
+      ],
+      "size": [
+        274.080078125,
+        314.00006103515625
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.52",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.1",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "007BE2kVly1i025ijdu54j31xg3341br.jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "LoadImage",
+      "pos": [
+        9528.074397975925,
+        510.17027516504214
+      ],
+      "size": [
+        274.080078125,
+        314.00006103515625
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.52",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.1",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "ComfyUI_00002_ucbjo_1776531485.png",
+        "image"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "SaveImage",
+      "pos": [
+        9184.283575832995,
+        159.95054481963552
+      ],
+      "size": [
+        270,
+        270
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 6
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
       "id": 10,
       "type": "CodexExecImageGen",
       "pos": [
@@ -45,8 +162,8 @@
         424
       ],
       "flags": {},
-      "order": 0,
-      "mode": 4,
+      "order": 2,
+      "mode": 0,
       "inputs": [
         {
           "name": "images",
@@ -105,53 +222,24 @@
         "",
         true,
         "",
-        true,
+        "",
         true,
         true
-      ]
-    },
-    {
-      "id": 5,
-      "type": "SaveImage",
-      "pos": [
-        9187.54541887594,
-        154.65009653553065
-      ],
-      "size": [
-        270,
-        270
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 4,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 6
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "SaveImage"
-      },
-      "widgets_values": [
-        "ComfyUI"
       ]
     },
     {
       "id": 13,
       "type": "BatchImagesNode",
       "pos": [
-        9866.629792560074,
-        179.44793939221597
+        9911.47976959888,
+        152.01899135562635
       ],
       "size": [
         169.23046875,
         86
       ],
       "flags": {},
-      "order": 4,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -189,94 +277,6 @@
         "ver": "0.14.1"
       },
       "widgets_values": []
-    },
-    {
-      "id": 14,
-      "type": "LoadImage",
-      "pos": [
-        9528.07446410572,
-        151.72725075145695
-      ],
-      "size": [
-        274.080078125,
-        314.00006103515625
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            8
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage",
-        "cnr_id": "comfy-core",
-        "ver": "0.3.52",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.1",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "007BE2kVly1i025ijdu54j31xg3341br.jpg",
-        "image"
-      ]
-    },
-    {
-      "id": 15,
-      "type": "LoadImage",
-      "pos": [
-        9528.074397975925,
-        510.17027516504214
-      ],
-      "size": [
-        274.080078125,
-        314.00006103515625
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            9
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage",
-        "cnr_id": "comfy-core",
-        "ver": "0.3.52",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.1",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "ComfyUI_00002_ucbjo_1776531485.png",
-        "image"
-      ]
     },
     {
       "id": 11,
@@ -350,7 +350,7 @@
         "",
         true,
         "",
-        true,
+        "",
         true,
         true
       ]
@@ -418,8 +418,8 @@
       "bounding": [
         9518.074397975925,
         77.7869910847104,
-        1528.6198997956817,
-        768.8815689176365
+        1318.6007070090454,
+        771.5950270200614
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -429,10 +429,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.5730855330116834,
+      "scale": 1.116781577942487,
       "offset": [
-        -8057.524789180352,
-        506.09294675285423
+        -8617.920775133245,
+        96.39987125974397
       ]
     },
     "frontendVersion": "1.42.11",
