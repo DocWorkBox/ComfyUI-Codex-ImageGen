@@ -57,7 +57,9 @@ function setupInputVisibility(node) {
 
 function applyInputVisibility(node) {
     setupInputVisibility(node);
-    const visibleInputs = node._codexAllInputs.filter((input) => !input._codexHidden);
+    const visibleInputs = orderVisibleInputsForDisplay(
+        node._codexAllInputs.filter((input) => !input._codexHidden)
+    );
     const hiddenInputs = node._codexAllInputs.filter((input) => input._codexHidden);
     for (const input of hiddenInputs) {
         if (input.link != null) {
@@ -70,6 +72,22 @@ function applyInputVisibility(node) {
         }
     }
     node.inputs = visibleInputs;
+}
+
+function orderVisibleInputsForDisplay(inputs) {
+    const baseInputs = inputs.filter((input) => !/^images_\d+$/.test(input.name));
+    const numberedImageInputs = inputs
+        .filter((input) => /^images_\d+$/.test(input.name))
+        .sort((a, b) => Number.parseInt(a.name.split("_")[1], 10) - Number.parseInt(b.name.split("_")[1], 10));
+    const imageIndex = baseInputs.findIndex((input) => input.name === "images");
+    if (imageIndex < 0) {
+        return [...baseInputs, ...numberedImageInputs];
+    }
+    return [
+        ...baseInputs.slice(0, imageIndex + 1),
+        ...numberedImageInputs,
+        ...baseInputs.slice(imageIndex + 1),
+    ];
 }
 
 function applyConcurrencyVisibility(node, count) {
