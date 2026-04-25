@@ -3,6 +3,7 @@ import { app } from "../../scripts/app.js";
 const NODE_CLASS = "CodexExecImageGen";
 const NODE_TITLE = "Codex Exec ImageGen";
 const MAX_CONCURRENCY = 8;
+const hiddenElementStyles = new WeakMap();
 
 function setupWidget(widget) {
     if (!widget || widget._codexSetup) {
@@ -25,19 +26,76 @@ function setWidgetVisible(widget, visible) {
 }
 
 function setWidgetDomVisible(widget, visible) {
-    const display = visible ? "" : "none";
-    const visibility = visible ? "" : "hidden";
-    for (const element of [
+    for (const element of getWidgetElements(widget)) {
+        setElementVisible(element, visible);
+    }
+    if (widget.linkedWidgets) {
+        for (const linkedWidget of widget.linkedWidgets) {
+            setWidgetDomVisible(linkedWidget, visible);
+        }
+    }
+}
+
+function getWidgetElements(widget) {
+    const elements = [
         widget.element,
         widget.inputEl,
         widget.textarea,
         widget.domElement,
-    ]) {
-        if (element?.style) {
-            element.style.display = display;
-            element.style.visibility = visibility;
+    ].filter((element) => element?.style);
+    for (const element of [...elements]) {
+        const domWidget = element.closest?.(".dom-widget");
+        if (domWidget?.style) {
+            elements.push(domWidget);
         }
     }
+    return [...new Set(elements)];
+}
+
+function setElementVisible(element, visible) {
+    if (!element?.style) {
+        return;
+    }
+    if (!visible) {
+        if (!hiddenElementStyles.has(element)) {
+            hiddenElementStyles.set(element, {
+                display: element.style.display,
+                visibility: element.style.visibility,
+                pointerEvents: element.style.pointerEvents,
+                opacity: element.style.opacity,
+                width: element.style.width,
+                height: element.style.height,
+                minHeight: element.style.minHeight,
+                maxHeight: element.style.maxHeight,
+                overflow: element.style.overflow,
+            });
+        }
+        element.style.display = "none";
+        element.style.visibility = "hidden";
+        element.style.pointerEvents = "none";
+        element.style.opacity = "0";
+        element.style.width = "0";
+        element.style.height = "0";
+        element.style.minHeight = "0";
+        element.style.maxHeight = "0";
+        element.style.overflow = "hidden";
+        return;
+    }
+
+    const original = hiddenElementStyles.get(element);
+    if (!original) {
+        return;
+    }
+    element.style.display = original.display;
+    element.style.visibility = original.visibility;
+    element.style.pointerEvents = original.pointerEvents;
+    element.style.opacity = original.opacity;
+    element.style.width = original.width;
+    element.style.height = original.height;
+    element.style.minHeight = original.minHeight;
+    element.style.maxHeight = original.maxHeight;
+    element.style.overflow = original.overflow;
+    hiddenElementStyles.delete(element);
 }
 
 function setInputVisible(input, visible) {
