@@ -296,14 +296,22 @@ def test_runner_defaults_working_directory_to_comfy_output_dir(tmp_path):
 def test_node_contract_matches_plan():
     inputs = CodexExecImageGen.INPUT_TYPES()
 
+    assert inputs["required"]["concurrency_count"] == (
+        ["1", "2", "3", "4", "5", "6", "7", "8"],
+        {"default": "1"},
+    )
     assert inputs["required"]["prompt"] == ("STRING", {"multiline": True})
     assert inputs["optional"]["images"] == ("IMAGE",)
+    assert inputs["optional"]["model"] == (["gpt-5.4", "gpt-5.5"], {"default": "gpt-5.4"})
+    assert inputs["optional"]["prompt_2"] == ("STRING", {"multiline": True})
+    assert inputs["optional"]["images_8"] == ("IMAGE",)
     assert inputs["optional"]["aspect_ratio"] == (
         ["none", "1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3"],
         {"default": "none"},
     )
     assert inputs["optional"]["auto_save_to_output"] == ("BOOLEAN", {"default": False})
     assert "sandbox_mode" not in inputs["optional"]
+    assert CodexExecImageGen.OUTPUT_IS_LIST == (True, False, False, False, False, False, False)
     assert CodexExecImageGen.RETURN_TYPES == (
         "IMAGE",
         "STRING",
@@ -405,10 +413,60 @@ def test_node_cleans_codex_generated_image_when_not_auto_saving(tmp_path, monkey
 
     image, generated_path, *_ = CodexExecImageGen().execute("draw")
 
-    assert image.shape[1:3] == (3, 2)
+    assert len(image) == 1
+    assert image[0].shape[1:3] == (3, 2)
     assert generated_path == ""
     assert not generated.exists()
     assert not generated.parent.exists()
+
+
+def test_node_runs_multiple_prompts_concurrently(tmp_path, monkeypatch):
+    generated_paths = []
+    calls = []
+
+    class FakeRunner:
+        def __init__(self, codex_binary="codex"):
+            pass
+
+        def run(self, **kwargs):
+            index = len(calls) + 1
+            calls.append(kwargs)
+            generated = tmp_path / "runtime" / "codex_home" / "generated_images" / f"thread_{index}" / f"ig_{index}.png"
+            generated.parent.mkdir(parents=True)
+            Image.new("RGB", (index + 1, index + 2), "red").save(generated)
+            generated_paths.append(generated)
+            return FakeResult(
+                generated_image_path=str(generated),
+                last_message=f"generated {index}",
+                exit_code=0,
+                success=True,
+                used_prompt=f"$imagegen draw {index}",
+            )
+
+    monkeypatch.setattr("codex_node.CodexRunner", FakeRunner)
+
+    image, generated_path, last_message, _, used_prompt, exit_code, success = CodexExecImageGen().execute(
+        "draw 1",
+        concurrency_count="2",
+        prompt_2="draw 2",
+    )
+
+    assert len(image) == 2
+    assert tuple(image[0].shape) == (1, 3, 2, 3)
+    assert tuple(image[1].shape) == (1, 4, 3, 3)
+    assert generated_path == ""
+    assert "[1] generated" in last_message
+    assert "[2] generated" in last_message
+    assert "[1] $imagegen draw" in used_prompt
+    assert exit_code == 0
+    assert success is True
+    assert sorted(call["prompt"] for call in calls) == ["draw 1", "draw 2"]
+    assert all(not path.exists() for path in generated_paths)
+
+
+def test_node_requires_prompts_for_selected_concurrency():
+    with pytest.raises(ValueError, match="prompt_2 is required"):
+        CodexExecImageGen().execute("draw 1", concurrency_count="2")
 
 
 class FakeAuthManager:
@@ -420,10 +478,10 @@ class FakeAuthManager:
 
 
 class FakeResult:
-    def __init__(self, generated_image_path, last_message, exit_code, success):
+    def __init__(self, generated_image_path, last_message, exit_code, success, used_prompt="$imagegen draw"):
         self.generated_image_path = generated_image_path
         self.last_message = last_message
         self.raw_jsonl = ""
-        self.used_prompt = "$imagegen draw"
+        self.used_prompt = used_prompt
         self.exit_code = exit_code
         self.success = success

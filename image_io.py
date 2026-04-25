@@ -35,7 +35,7 @@ def empty_image_tensor():
     return _numpy_to_tensor(array)
 
 
-def _tensor_to_numpy(images) -> np.ndarray:
+def _image_tensor_to_float_numpy(images) -> np.ndarray:
     if hasattr(images, "detach"):
         images = images.detach().cpu().numpy()
     else:
@@ -45,13 +45,15 @@ def _tensor_to_numpy(images) -> np.ndarray:
         images = np.expand_dims(images, axis=0)
     if images.ndim != 4:
         raise ValueError("images must be a ComfyUI IMAGE tensor with shape [B,H,W,C].")
-
     if images.shape[-1] == 4:
         images = images[..., :3]
     if images.shape[-1] != 3:
         raise ValueError("images must have 3 RGB channels or 4 RGBA channels.")
+    return np.clip(images.astype(np.float32), 0.0, 1.0)
 
-    images = np.clip(images, 0.0, 1.0)
+
+def _tensor_to_numpy(images) -> np.ndarray:
+    images = _image_tensor_to_float_numpy(images)
     return (images * 255.0).round().astype(np.uint8)
 
 

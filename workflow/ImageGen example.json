@@ -1,44 +1,15 @@
 {
   "id": "cd326b4f-fb4e-42f0-8c85-5e272a3a8d5e",
   "revision": 0,
-  "last_node_id": 15,
-  "last_link_id": 10,
+  "last_node_id": 16,
+  "last_link_id": 13,
   "nodes": [
-    {
-      "id": 12,
-      "type": "SaveImage",
-      "pos": [
-        10540.765280513078,
-        153.62657742559034
-      ],
-      "size": [
-        270,
-        270
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 7
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "SaveImage"
-      },
-      "widgets_values": [
-        "ComfyUI"
-      ]
-    },
     {
       "id": 14,
       "type": "LoadImage",
       "pos": [
-        9528.07446410572,
-        151.72725075145695
+        8252.909002406817,
+        297.6851994196643
       ],
       "size": [
         274.080078125,
@@ -78,11 +49,62 @@
       ]
     },
     {
+      "id": 13,
+      "type": "BatchImagesNode",
+      "pos": [
+        8631.070310223378,
+        298.85092630042476
+      ],
+      "size": [
+        169.23046875,
+        86
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "image0",
+          "name": "images.image0",
+          "type": "IMAGE",
+          "link": 8
+        },
+        {
+          "label": "image1",
+          "name": "images.image1",
+          "type": "IMAGE",
+          "link": 9
+        },
+        {
+          "label": "image2",
+          "name": "images.image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BatchImagesNode",
+        "cnr_id": "comfy-core",
+        "ver": "0.14.1"
+      },
+      "widgets_values": []
+    },
+    {
       "id": 15,
       "type": "LoadImage",
       "pos": [
-        9528.074397975925,
-        510.17027516504214
+        8251.886509282991,
+        658.0817082500089
       ],
       "size": [
         274.080078125,
@@ -122,11 +144,103 @@
       ]
     },
     {
+      "id": 16,
+      "type": "CodexExecImageGen",
+      "pos": [
+        8836.332195472522,
+        301.82395755229277
+      ],
+      "size": [
+        254.615234375,
+        502
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "images_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "generated_image",
+          "shape": 6,
+          "type": "IMAGE",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "generated_image_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "last_message",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "raw_jsonl",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "used_prompt",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "exit_code",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "success",
+          "type": "BOOLEAN",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CodexExecImageGen"
+      },
+      "widgets_values": [
+        "2",
+        "一只猫，1:1",
+        "图1人物换上图2的服饰",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "none",
+        "gpt-5.4",
+        "medium",
+        "",
+        true,
+        false,
+        "",
+        true,
+        true
+      ]
+    },
+    {
       "id": 5,
       "type": "SaveImage",
       "pos": [
-        9184.283575832995,
-        159.95054481963552
+        9181.598675400484,
+        300.85906006926587
       ],
       "size": [
         270,
@@ -139,7 +253,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 6
+          "link": 11
         }
       ],
       "outputs": [],
@@ -149,230 +263,9 @@
       "widgets_values": [
         "ComfyUI"
       ]
-    },
-    {
-      "id": 10,
-      "type": "CodexExecImageGen",
-      "pos": [
-        8747.415434795885,
-        149.10911939807826
-      ],
-      "size": [
-        400,
-        424
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "generated_image",
-          "type": "IMAGE",
-          "links": [
-            6
-          ]
-        },
-        {
-          "name": "generated_image_path",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "last_message",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "raw_jsonl",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "used_prompt",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "exit_code",
-          "type": "INT",
-          "links": null
-        },
-        {
-          "name": "success",
-          "type": "BOOLEAN",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CodexExecImageGen"
-      },
-      "widgets_values": [
-        "生成高完成度史诗感艺术海报，双重曝光构图，米白色背景，游戏：Detroit: Become Human，Connor的侧脸大剪影占据主体，内部融合Kara，Markus，卡姆斯基，卡爾，安德森，拍立得照片等元素，配上标题和文字。",
-        "none",
-        "gpt-5.4",
-        "medium",
-        "",
-        true,
-        "",
-        "",
-        true,
-        true
-      ]
-    },
-    {
-      "id": 13,
-      "type": "BatchImagesNode",
-      "pos": [
-        9911.47976959888,
-        152.01899135562635
-      ],
-      "size": [
-        169.23046875,
-        86
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "image0",
-          "name": "images.image0",
-          "type": "IMAGE",
-          "link": 8
-        },
-        {
-          "label": "image1",
-          "name": "images.image1",
-          "type": "IMAGE",
-          "link": 9
-        },
-        {
-          "label": "image2",
-          "name": "images.image2",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            10
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "BatchImagesNode",
-        "cnr_id": "comfy-core",
-        "ver": "0.14.1"
-      },
-      "widgets_values": []
-    },
-    {
-      "id": 11,
-      "type": "CodexExecImageGen",
-      "pos": [
-        10112.838225341166,
-        151.38699108471042
-      ],
-      "size": [
-        400,
-        424
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 10
-        }
-      ],
-      "outputs": [
-        {
-          "name": "generated_image",
-          "type": "IMAGE",
-          "links": [
-            7
-          ]
-        },
-        {
-          "name": "generated_image_path",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "last_message",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "raw_jsonl",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "used_prompt",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "exit_code",
-          "type": "INT",
-          "links": null
-        },
-        {
-          "name": "success",
-          "type": "BOOLEAN",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CodexExecImageGen"
-      },
-      "widgets_values": [
-        "图1的人穿上图2的服装配饰",
-        "none",
-        "gpt-5.4",
-        "medium",
-        "",
-        true,
-        "",
-        "",
-        true,
-        true
-      ]
     }
   ],
   "links": [
-    [
-      6,
-      10,
-      0,
-      5,
-      0,
-      "IMAGE"
-    ],
-    [
-      7,
-      11,
-      0,
-      12,
-      0,
-      "IMAGE"
-    ],
     [
       8,
       14,
@@ -390,49 +283,30 @@
       "IMAGE"
     ],
     [
-      10,
+      11,
+      16,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
       13,
       0,
-      11,
-      0,
+      16,
+      1,
       "IMAGE"
     ]
   ],
-  "groups": [
-    {
-      "id": 1,
-      "title": "Text to Image",
-      "bounding": [
-        8737.415434795885,
-        75.5091193980783,
-        737.532696253098,
-        507.9234253600688
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 2,
-      "title": "Reference to Image",
-      "bounding": [
-        9518.074397975925,
-        77.7869910847104,
-        1318.6007070090454,
-        771.5950270200614
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 1.116781577942487,
+      "scale": 1.015255979947713,
       "offset": [
-        -8617.920775133245,
-        96.39987125974397
+        -7813.320435441294,
+        34.90145915156925
       ]
     },
     "frontendVersion": "1.42.11",

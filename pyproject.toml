@@ -1,6 +1,6 @@
 [project]
 name = "codex-imagegen"
-version = "0.1.0"
+version = "0.2.0"
 description = "ComfyUI custom node that runs Codex CLI image generation and image editing workflows."
 license = { text = "MIT License" }
 requires-python = ">=3.10"
@@ -18,3 +18,4 @@ Documentation = "https://github.com/DocWorkBox/ComfyUI-Codex-ImageGen#readme"
 PublisherId = "zhaoke1006"
 DisplayName = "Codex ImageGen"
 requires-comfyui = ">=0.3.0"
+web = "web"

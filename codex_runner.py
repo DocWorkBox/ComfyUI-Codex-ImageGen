@@ -23,7 +23,7 @@ except ImportError:
     from prompt_builder import ALLOWED_ASPECT_RATIOS, build_imagegen_prompt
 
 
-ALLOWED_MODELS = ("gpt-5.4",)
+ALLOWED_MODELS = ("gpt-5.4", "gpt-5.5")
 ALLOWED_REASONING_EFFORTS = ("low", "medium", "high")
 ALLOWED_SANDBOX_MODES = ("read-only", "workspace-write", "danger-full-access")
 

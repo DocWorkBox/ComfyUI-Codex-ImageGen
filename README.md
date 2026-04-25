@@ -120,9 +120,19 @@ $imagegen <你的 prompt>
 
 如果选择了 `aspect_ratio`，会变成 `$imagegen 画面比例 <比例>。<你的 prompt>`。这里刻意使用单行格式，贴近 Codex CLI 中可直接生图的 `$imagegen 画一只猫` 用法。
 
+- `concurrency_count`：并发任务数量。可选 `1` 到 `8`，默认 `1`。选择大于 `1` 时，节点会显示对应数量的 `prompt_n` 和 `images_n` 输入项，并在后台同时启动多个 `codex exec` 任务。
 - `images`：可选图片输入端口，类型为 ComfyUI `IMAGE`。可以从上游节点接入一张或一批图片。节点会把接入的图片保存到 ComfyUI 自身的 `input` 目录，再通过 Codex CLI 的 `--image` 参数传入。
+- `prompt_2` 到 `prompt_8`：并发任务 2 到 8 的提示词。只有当 `concurrency_count` 选到对应数量时才需要填写。
+- `images_2` 到 `images_8`：并发任务 2 到 8 的参考图输入。每组任务会使用自己的提示词和参考图独立执行。
+
+![Concurrency workflow demo](docs/images/concurrency-demo.png)
+
+同时进行生图及参考生图工作：
+
+![Concurrent text and reference image workflow demo](docs/images/concurrent-text-and-reference-demo.png)
+
 - `aspect_ratio`：图片比例提示。可选 `none`、`1:1`、`16:9`、`9:16`、`4:3`、`3:4`、`3:2`、`2:3`，默认 `none`。该选项不会映射成 Codex CLI 参数，也不会添加 `--aspect-ratio`；选择具体比例时，只会在 prompt 中加入 `画面比例 <比例>`。
-- `model`：Codex 模型选择。当前只开放 `gpt-5.4`，用于映射 Codex CLI 的 `--model / -m`。
+- `model`：Codex 模型选择。可选 `gpt-5.4`、`gpt-5.5`，默认 `gpt-5.4`，用于映射 Codex CLI 的 `--model / -m`。
 - `reasoning_effort`：推理强度，映射 `-c model_reasoning_effort=<low|medium|high>`。可选 `low`、`medium`、`high`，默认 `medium`。
 - `working_directory`：Codex 执行目录，映射 `--cd / -C`。为空时使用 ComfyUI 自身的 `output` 目录，便于生成图片直接进入 ComfyUI 输出目录；填写时必须是已存在目录。
 - `json_output`：是否启用 Codex CLI 的 `--json` 输出。启用后 stdout 会保存为 JSONL 文本并通过 `raw_jsonl` 输出。
@@ -135,13 +145,13 @@ $imagegen <你的 prompt>
 
 ## 节点输出
 
-- `generated_image`：图片输出端口，类型为 ComfyUI `IMAGE`。如果成功解析到生成图片，节点会读取该图片并传给下游节点；如果执行失败或没有解析到图片，节点会直接报错，不再静默输出 1x1 空图。
-- `generated_image_path`：当 `auto_save_to_output=true` 时，返回复制到 ComfyUI `output` 目录后的图片路径；默认不自动保存时返回空字符串，避免返回已经清理的临时图路径。
-- `last_message`：Codex `-o` 输出文件内容；如果执行失败，则返回可读错误信息。
-- `raw_jsonl`：启用 `json_output` 时保存的 stdout JSONL 原文。
-- `used_prompt`：实际发送给 Codex 的最终 prompt，包含 `$imagegen`。
-- `exit_code`：`codex exec` 进程退出码，或本地错误码。
-- `success`：仅当 `codex exec` 退出码为 `0` 时为 `true`。
+- `generated_image`：图片输出端口，类型为 ComfyUI `IMAGE` list。单任务时输出 1 个 list item；并发任务时按任务编号顺序输出多个 list item。下游普通“保存图像”节点会对每个 item 分别执行，因此不同尺寸图片不需要补边，也不会产生黑边。
+- `generated_image_path`：当 `auto_save_to_output=true` 时，返回复制到 ComfyUI `output` 目录后的图片路径；并发任务会用换行分隔多条路径。默认不自动保存时返回空字符串，避免返回已经清理的临时图路径。
+- `last_message`：Codex `-o` 输出文件内容；并发任务会按 `[1]`、`[2]` 等编号合并。如果执行失败，则返回可读错误信息。
+- `raw_jsonl`：启用 `json_output` 时保存的 stdout JSONL 原文；并发任务会按编号合并。
+- `used_prompt`：实际发送给 Codex 的最终 prompt，包含 `$imagegen`；并发任务会按编号合并。
+- `exit_code`：全部任务成功时为 `0`。任一任务失败时节点会直接报错。
+- `success`：全部任务成功时为 `true`。任一任务失败时节点会直接报错。
 
 ## 进度显示
 
